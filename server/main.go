@@ -2,19 +2,26 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net"
 	"net/http"
-	"star-rail/server/game"
 	"time"
 
 	"golang.org/x/net/websocket"
+	
+	"star-rail/server/game"
 )
 
 func main() {
 	fmt.Println("开始")
 
+	go func() {
+		game.GetManageMatch().Run()	
+	}()
+
 	http.Handle("/", websocket.Handler(WebsocketHandler))
-	http.ListenAndServe(":3000", nil)
+
+	log.Fatal(http.ListenAndServe(":3000", nil))
 }
 
 
